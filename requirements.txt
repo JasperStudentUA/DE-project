@@ -1,0 +1,20 @@
+# Data fetching
+fredapi
+pytrends
+yfinance
+
+# Database
+duckdb
+
+# Workflow orchestration
+apache-airflow
+
+# Data processing
+pandas
+numpy
+
+# Environment variables
+python-dotenv
+
+# Jupyter notebooks
+jupyter
