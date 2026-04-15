@@ -6,8 +6,9 @@ yfinance
 # Database
 duckdb
 
+
 # Workflow orchestration
-apache-airflow
+schedule
 
 # Data processing
 pandas
