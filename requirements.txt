@@ -3,9 +3,11 @@ fredapi
 pytrends
 yfinance
 
+# Storage / serialisation
+pyarrow
+
 # Database
 duckdb
-
 
 # Workflow orchestration
 schedule
