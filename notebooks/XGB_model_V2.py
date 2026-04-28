@@ -1,13 +1,24 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from pyspark.sql import SparkSession
 
 from xgboost import XGBRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 path = "data/processed/master.parquet"
 
-df = pd.read_parquet(path)
+# Spark reads & validates the data
+spark = SparkSession.builder.appName("XGB_Sectors").master("local[*]").getOrCreate()
+spark.sparkContext.setLogLevel("WARN")
+
+spark_df = spark.read.parquet("data/processed/master.parquet")
+print(f"Spark loaded: {spark_df.count()} rows, {len(spark_df.columns)} cols")
+
+# Hand off to pandas for XGBoost
+df = spark_df.toPandas()
+spark.stop()
+
 df["DATE"] = pd.to_datetime(df["DATE"])
 df = df.sort_values("DATE").reset_index(drop=True)
 
@@ -63,8 +74,6 @@ for sector in sector_cols:
 
     feature_cols = base_features + ["return_lag1", "return_roll3"]
     
-    baseline_pred = model_df["return_roll3"] # predict next month's return using rolling 3m avg 
-
     model_df = model_df.dropna().reset_index(drop=True)
 
     X = model_df[feature_cols]
@@ -158,5 +167,5 @@ all_predictions = pd.concat(
 all_predictions.to_parquet("data/processed/xgb_predictions_V2.parquet", index=False)
 
 print("\nSaved:")
-print("data/processed/xgb_sector_results.csv")
-print("data/processed/xgb_predictions.parquet")
+print("data/processed/xgb_sector_results_V2.csv")
+print("data/processed/xgb_predictions_V2.parquet")

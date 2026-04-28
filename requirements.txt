@@ -18,6 +18,8 @@ numpy
 matplotlib
 xgboost
 scikit-learn
+pyspark>=3.5.0
+
 
 # Environment variables
 python-dotenv
