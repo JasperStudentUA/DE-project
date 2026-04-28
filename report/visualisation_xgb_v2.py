@@ -63,9 +63,15 @@ COLOR_SEQUENCE = [
 
 
 def save_fig(fig, filename):
-    path = OUTPUT_DIR / filename
-    fig.write_html(path, include_plotlyjs=True)
-    print(f"Saved {path.relative_to(PROJECT_ROOT)}")
+    html_path = OUTPUT_DIR / filename
+    png_path = OUTPUT_DIR / filename.replace(".html", ".png")
+
+    fig.write_html(html_path, include_plotlyjs=True)
+    fig.write_image(png_path, width=1400, height=800, scale=2)
+
+    print(f"Saved {html_path.relative_to(PROJECT_ROOT)}")
+    print(f"Saved {png_path.relative_to(PROJECT_ROOT)}")
+
 
 
 def feature_group(feature):
