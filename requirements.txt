@@ -15,6 +15,9 @@ schedule
 # Data processing
 pandas
 numpy
+matplotlib
+xgboost
+scikit-learn
 
 # Environment variables
 python-dotenv

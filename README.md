@@ -3,6 +3,8 @@ Data Engineering project
 
 Imortant commands;
 
+pip install -r requirements.txt
+
 Get the newest files/ changes:
 git pull origin main
 
