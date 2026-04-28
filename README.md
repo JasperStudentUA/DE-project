@@ -13,3 +13,6 @@ git add .
 git commit -m "comment"
 git push
 
+Interactive Plotly versions are stored as HTML files in report/figures/xgb_v2/.
+For GitHub preview, static PNG versions are provided in the same folder.
+
