@@ -17,6 +17,7 @@ pandas
 numpy
 matplotlib
 plotly
+kaleido
 xgboost
 scikit-learn
 pyspark>=3.5.0
