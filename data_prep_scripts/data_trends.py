@@ -37,7 +37,7 @@ for col_name, term in keywords.items():
     try:
         pytrends.build_payload(
             kw_list=[term],
-            timeframe="2004-01-01 2026-04-30",  # full range → forces monthly
+            timeframe="2004-01-01 2026-04-30",  
             geo="US"
         )
         df_term = pytrends.interest_over_time()
@@ -45,12 +45,12 @@ for col_name, term in keywords.items():
         if not df_term.empty:
             df_term = df_term[[term]].rename(columns={term: col_name})
             all_series.append(df_term)
-            print(f"  ✅ {len(df_term)} rows")
+            print(f" {len(df_term)} rows")
         
         time.sleep(5)
 
     except Exception as e:
-        print(f"  ⚠️  Failed '{term}': {e}")
+        print(f" Failed '{term}': {e}")
         time.sleep(30)
 
 # Merge all keywords on date index
@@ -62,14 +62,14 @@ df = df.reset_index().rename(columns={"date": "DATE"})
 df["DATE"] = pd.to_datetime(df["DATE"]).dt.strftime("%Y-%m-%d")
 df = df.sort_values("DATE").reset_index(drop=True)
 
-# Drop duplicate dates that can appear at chunk boundaries
+# Drop duplicate dates 
 df = df.drop_duplicates(subset="DATE").sort_values("DATE").reset_index(drop=True)
 
 # Save to data/raw/
 os.makedirs("data/raw", exist_ok=True)
 df.to_parquet("data/raw/google_trends.parquet", index=False)
 
-print(f"\n✅ Saved {len(df)} rows → data/raw/google_trends.parquet")
+print(f"\n Saved {len(df)} rows → data/raw/google_trends.parquet")
 print(f"   Keywords : {list(keywords.keys())}")
 print(f"   Date range: {df['DATE'].min()} → {df['DATE'].max()}")
 print(df.head())

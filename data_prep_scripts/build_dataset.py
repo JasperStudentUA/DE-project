@@ -3,12 +3,10 @@ import duckdb
 
 os.makedirs("data/processed", exist_ok=True)
 
-# Connect to persistent DuckDB database
+# Connect to DuckDB database
 con = duckdb.connect("data/processed/analytics.db")
 
-# STEP 1 — Join all 3 raw sources on DATE
-# Uses DuckDB's native read_parquet() — no loading into memory
-# INNER JOIN keeps only months present in all 3 sources
+# Step 1: Join all 3 raw sources on DATE (INNER JOIN) 
 con.execute("""
     CREATE OR REPLACE TABLE master_raw AS
     SELECT
@@ -53,10 +51,8 @@ con.execute("""
     ORDER BY f.DATE
 """)
 
-# STEP 2 — Feature engineering using SQL window functions
-# All features are LAGGED by at least 1 month to avoid
-# look-ahead bias: we only use information available BEFORE
-# the month whose returns we want to predict
+# Step 2: Feature engineering using SQL window functions
+# (All features LAGGED by at least 1 month to avoid look-ahead bias: we only use information available before the month whose returns we want to predict)
 con.execute("""
     CREATE OR REPLACE TABLE master AS
     SELECT
@@ -91,11 +87,11 @@ con.execute("""
 """)
 
 
-# STEP 3 — Inspect and export
+# Step 3: output and export
 df = con.execute("SELECT * FROM master").df()
 df.to_parquet("data/processed/master.parquet", index=False)
 
-print(f"✅ master table: {len(df)} rows × {len(df.columns)} columns")
+print(f"   master table: {len(df)} rows × {len(df.columns)} columns")
 print(f"   Date range : {df['DATE'].min()} → {df['DATE'].max()}")
 print(f"   Tables in analytics.db: {[r[0] for r in con.execute('SHOW TABLES').fetchall()]}")
 print(df.head())

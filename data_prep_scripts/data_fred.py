@@ -33,5 +33,5 @@ df = df.dropna(subset=["inflation_yoy"])
 
 os.makedirs("data/raw", exist_ok=True)
 df.to_parquet("data/raw/cpi_inflation_regimes.parquet", index=False)
-print(f"✅ Saved {len(df)} rows → data/raw/cpi_inflation_regimes.parquet")
+print(f"Saved {len(df)} rows → data/raw/cpi_inflation_regimes.parquet")
 print(df.head())

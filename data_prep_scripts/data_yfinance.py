@@ -2,15 +2,6 @@ import os
 import yfinance as yf
 import pandas as pd
 
-# =============================================================
-# 9 SPDR Sector ETFs — all with full data from 2004 to present
-
-# Inflation sensitivity classification:
-#   HIGH    : XLE (Energy), XLB (Materials), XLU (Utilities)
-#   MEDIUM  : XLF (Financials), XLI (Industrials), XLP (Consumer Staples)
-#   LOW     : XLK (Technology), XLV (Healthcare), XLY (Consumer Discret.)
-# =============================================================
-
 sector_etfs = {
     "Energy":                 "XLE",   
     "Technology":             "XLK",   
@@ -44,12 +35,12 @@ monthly_close = monthly_close.rename(columns=ticker_to_sector)
 # Compute monthly % returns: (P_t - P_t-1) / P_t-1 * 100
 monthly_returns = monthly_close.pct_change() * 100
 
-# Reset index and standardise DATE column to YYYY-MM-DD (matches FRED output)
+# Reset index and standardise DATE column match FRED output
 monthly_returns = monthly_returns.reset_index()
 monthly_returns = monthly_returns.rename(columns={"Date": "DATE"})
 monthly_returns["DATE"] = pd.to_datetime(monthly_returns["DATE"]).dt.strftime("%Y-%m-%d")
 
-# Drop first row — NaN because there is no prior month to compute return from
+# Drop first row: NaN 
 monthly_returns = monthly_returns.dropna(how="all", subset=list(sector_etfs.keys()))
 
 # Save to data/raw/ 

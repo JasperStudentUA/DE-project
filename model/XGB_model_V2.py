@@ -65,7 +65,7 @@ predictions = {}
 for sector in sector_cols:
     model_df = df[["DATE", sector] + base_features].copy()
 
-    # Target: next month's sector return
+    # Target: next month sector return
     model_df["target_next_month_return"] = model_df[sector].shift(-1)
 
     # Sector-specific lag features
@@ -81,9 +81,9 @@ for sector in sector_cols:
 
     train_size = int(len(model_df) * 0.8)
 
-    # --- WALK-FORWARD CV (3 folds) ---
+    # WALK-FORWARD CV (3 folds) 
     n = len(model_df)
-    fold_size = n // 4  # each test fold ≈ 25% of data
+    fold_size = n // 4 
     cv_maes = []
     for fold in range(1, 4):
         cv_train_end = fold * fold_size
@@ -120,7 +120,7 @@ for sector in sector_cols:
     model.fit(X_train, y_train)
     preds = model.predict(X_test)
 
-    # --- FEATURE IMPORTANCE (top 5) ---
+    # FEATURE IMPORTANCE (top 5) 
     importance_df = pd.DataFrame({
         "feature": feature_cols,
         "importance": model.feature_importances_

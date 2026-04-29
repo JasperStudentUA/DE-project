@@ -21,6 +21,8 @@ kaleido
 xgboost
 scikit-learn
 pyspark>=3.5.0
+pathlib 
+plotly
 
 
 # Environment variables
